@@ -2,12 +2,13 @@ import React from 'react';
 import CardNav from './components/CardNav';
 import { GoArrowUpRight } from "react-icons/go";
 import logo from "./assets/logo.png"
+import LetterGlitch from './components/LetterGlitch';
 
 const App = () => {
   const items = [
     {
       label: "About",
-      bgColor: "#0D0716",
+      bgColor: "#dc2f02",
       textColor: "#fff",
       links: [
         { label: "Company", ariaLabel: "About Company" },
@@ -16,7 +17,7 @@ const App = () => {
     },
     {
       label: "Projects", 
-      bgColor: "#170D27",
+      bgColor: "#9e2a2b",
       textColor: "#fff",
       links: [
         { label: "Featured", ariaLabel: "Featured Projects" },
@@ -25,7 +26,7 @@ const App = () => {
     },
     {
       label: "Contact",
-      bgColor: "#271E37", 
+      bgColor: "#e5383b", 
       textColor: "#fff",
       links: [
         { label: "Email", ariaLabel: "Email us" },
@@ -36,16 +37,24 @@ const App = () => {
   ];
 
   return (
+    <div>
+    <LetterGlitch
+    glitchSpeed={40}
+    centerVignette={true}
+    outerVignette={true}
+    smooth={true}
+    />
     <CardNav
       logo={logo}
       logoAlt="Company Logo"
       items={items}
-      baseColor="#fff"
-      menuColor="#000"
-      buttonBgColor="#111"
-      buttonTextColor="#fff"
+      baseColor="#343a40"
+      menuColor="#fff"
+      buttonBgColor="#fff"
+      buttonTextColor="#111"
       ease="power3.out"
     />
+    </div>
   );
 };
 
