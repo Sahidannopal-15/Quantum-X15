@@ -3,12 +3,14 @@ import CardNav from './components/CardNav';
 import { GoArrowUpRight } from "react-icons/go";
 import logo from "./assets/logo.png"
 import LetterGlitch from './components/LetterGlitch';
+import FuzzyText from './components/FuzzyText';
+
 
 const App = () => {
   const items = [
     {
       label: "About",
-      bgColor: "#dc2f02",
+      bgColor: "#240046",
       textColor: "#fff",
       links: [
         { label: "Company", ariaLabel: "About Company" },
@@ -17,7 +19,7 @@ const App = () => {
     },
     {
       label: "Projects", 
-      bgColor: "#9e2a2b",
+      bgColor: "#003554",
       textColor: "#fff",
       links: [
         { label: "Featured", ariaLabel: "Featured Projects" },
@@ -26,7 +28,7 @@ const App = () => {
     },
     {
       label: "Contact",
-      bgColor: "#e5383b", 
+      bgColor: "#3c096c", 
       textColor: "#fff",
       links: [
         { label: "Email", ariaLabel: "Email us" },
@@ -37,23 +39,39 @@ const App = () => {
   ];
 
   return (
-    <div>
-    <LetterGlitch
-    glitchSpeed={40}
-    centerVignette={true}
-    outerVignette={true}
-    smooth={true}
-    />
-    <CardNav
-      logo={logo}
-      logoAlt="Company Logo"
-      items={items}
-      baseColor="#343a40"
-      menuColor="#fff"
-      buttonBgColor="#fff"
-      buttonTextColor="#111"
-      ease="power3.out"
-    />
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Background Layer */}
+      <div className="absolute inset-0 w-full h-full">
+        <LetterGlitch
+          glitchSpeed={40}
+          centerVignette={true}
+          outerVignette={true}
+          smooth={true}
+        />
+      </div>
+
+      {/* Navigation */}
+      <CardNav
+        logo={logo}
+        logoAlt="Company Logo"
+        items={items}
+        baseColor="#212529"
+        menuColor="#fff"
+        buttonBgColor="#fff"
+        buttonTextColor="#111"
+        ease="power3.out"
+      />
+
+      {/* FuzzyText Overlay di tengah */}
+      <div className="absolute inset-0 flex items-center justify-center z-10">
+        <FuzzyText 
+          baseIntensity={0.09} 
+          hoverIntensity={0.2} 
+          enableHover={true}
+        >
+          Hash-X15
+        </FuzzyText>
+      </div>
     </div>
   );
 };
