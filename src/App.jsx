@@ -9,12 +9,17 @@ import {GridScan} from './components/GridScan';
 import FileUploader from './components/FileUploader'
 import { Upload, File, X, Check } from 'lucide-react';
 import SelectAlgorithm from "./components/SelectAlgorithm";
+import HashButton from './components/HashButton';
 
 const App = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [algorithm, setAlgorithm] = useState("");
+  const [hashResults, setHashResults] = useState([]);
    const handleFileSelect = (files) => {
     setSelectedFiles(files);
+   }
+   const handleHashComplete = (results) => {
+    setHashResults(results);
    }
   const items = [
     {
@@ -101,7 +106,7 @@ const App = () => {
       </div>
 
       {/* Section 2*/}
-      <div className="relative w-full min-h-screen -mt-[10vh] bg-black">
+      <div className="relative w-full h-[130vH] bottom-20 bg-black">
         <div className="absolute inset-0 w-full h-full">
           <GridScan
             sensitivity={0.55}
@@ -141,6 +146,14 @@ const App = () => {
       />
     </div>
   )}
+  <div className='pt-10'>
+  {/* Hash Button */}
+                <HashButton
+                  files={selectedFiles}
+                  algorithm={algorithm}
+                  onHashComplete={handleHashComplete}
+                />
+  </div>
 </div>
 </div>
 </div>

@@ -1,0 +1,143 @@
+import React, { useState } from 'react';
+import { Hash, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { hashFile } from '../utils/hash'; // Import hash function
+
+const HashButton = ({ 
+  files = [], 
+  algorithm = 'SHA-256',
+  onHashComplete 
+}) => {
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  // Main hash calculation handler using hash.js
+  const handleCalculateHash = async () => {
+    if (files.length === 0) return;
+
+    setIsCalculating(true);
+    setProgress(0);
+
+    try {
+      const results = [];
+      
+      // Process each file using your hash.js
+      for (let i = 0; i < files.length; i++) {
+        const fileItem = files[i];
+        
+        // Calculate hash using your optimized chunked function
+        const hashHex = await hashFile(fileItem.file, algorithm);
+        
+        results.push({
+          fileName: fileItem.name,
+          fileSize: fileItem.size,
+          fileType: fileItem.type || 'unknown',
+          algorithm: algorithm,
+          hash: hashHex,
+          timestamp: new Date().toISOString()
+        });
+        
+        // Update progress
+        setProgress(((i + 1) / files.length) * 100);
+      }
+
+      // Pass results to parent component
+      if (onHashComplete) {
+        onHashComplete(results);
+      }
+
+      console.log('Hash calculation completed:', results);
+      
+    } catch (error) {
+      console.error('Hash calculation error:', error);
+      alert('Error calculating hash: ' + error.message);
+    } finally {
+      setIsCalculating(false);
+      setProgress(0);
+    }
+  };
+
+  const isDisabled = files.length === 0 || isCalculating;
+
+  return (
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="flex flex-col items-center gap-4">
+        {/* Calculate Button */}
+        <button
+          onClick={handleCalculateHash}
+          disabled={isDisabled}
+          className={`
+            group relative px-10 py-5 
+            bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500
+            bg-size-200 bg-pos-0
+            text-white font-bold text-xl rounded-2xl
+            transition-all duration-500
+            shadow-2xl
+            flex items-center gap-4
+            ${isDisabled 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-pos-100 hover:scale-105 hover:shadow-purple-500/50 cursor-pointer'
+            }
+          `}
+        >
+          {/* Text */}
+          <span>
+            {isCalculating 
+              ? `Calculating... ${Math.round(progress)}%`
+              : `Calculate Hash for ${files.length} file${files.length > 1 ? 's' : ''}`
+            }
+          </span>
+
+          {/* Glow Effect */}
+          <div className={`
+            absolute inset-0 -z-10 rounded-2xl 
+            bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 
+            blur-2xl transition-opacity duration-300
+            ${isDisabled ? 'opacity-0' : 'opacity-40 group-hover:opacity-70'}
+          `} />
+
+          {/* Progress Bar */}
+          {isCalculating && (
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-2xl overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-cyan-400 to-green-400 transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
+        </button>
+
+        {/* Info Text */}
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          {isCalculating ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Processing files with {algorithm}...
+            </span>
+          ) : files.length > 0 ? (
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-400" />
+              Ready to calculate using {algorithm}
+            </span>
+          ) : (
+            <span>Please upload files first</span>
+          )}
+        </div>
+      </div>
+
+      {/* CSS */}
+      <style>{`
+        .bg-size-200 {
+          background-size: 200% 100%;
+        }
+        .bg-pos-0 {
+          background-position: 0% 0%;
+        }
+        .bg-pos-100:hover {
+          background-position: 100% 0%;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default HashButton;
