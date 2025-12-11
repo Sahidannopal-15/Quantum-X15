@@ -90,7 +90,7 @@ const AlgorithmEducation = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-gradient-to-b from-black via-gray-900 to-black py-20 px-4">
-      {/* Subtle Grid Background */}
+      {/* Grid Background */}
       <div className="absolute inset-0 opacity-5">
         <div 
           className="h-full w-full" 
@@ -105,10 +105,6 @@ const AlgorithmEducation = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 mb-4 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full">
-            <Info className="w-5 h-5 text-purple-400" />
-            <span className="text-purple-400 font-medium">Understanding Hash Algorithms</span>
-          </div>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">
             Choose the Right Algorithm
           </h2>
@@ -186,7 +182,7 @@ const AlgorithmEducation = () => {
                   </div>
                 </div>
 
-                {/* Best For Badge */}
+                {/* Badge */}
                 <div className="mt-4 text-center">
                   <span className={`
                     inline-block px-3 py-1 text-xs font-semibold
@@ -207,7 +203,7 @@ const AlgorithmEducation = () => {
           })}
         </div>
 
-        {/* Comparison Table */}
+        {/* Table */}
         <div className="mb-16">
           <h3 className="text-3xl font-bold text-white text-center mb-8">
             Side-by-Side Comparison
@@ -274,21 +270,6 @@ const AlgorithmEducation = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Bottom Info Box */}
-        <div className="mt-16 p-6 bg-blue-900/20 border border-blue-500/30 rounded-xl">
-          <div className="flex items-start gap-4">
-            <Info className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="text-blue-400 font-bold mb-2">💡 Pro Tip</h4>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                <strong>Still unsure?</strong> SHA-256 is the safe choice for 99% of use cases. 
-                It's fast, secure, and universally supported. Only choose SHA-384 or SHA-512 if 
-                you have specific compliance requirements or need extra security for highly sensitive data.
-              </p>
-            </div>
           </div>
         </div>
       </div>

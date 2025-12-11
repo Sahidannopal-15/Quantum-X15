@@ -4,7 +4,7 @@ import { Upload, File, X, Check } from 'lucide-react';
 const FileUploader = ({ 
   onFileSelect, 
   accept = "*",
-  maxSize = 10 * 1024 * 1024, // 10MB default
+  maxSize = 50 * 1024 * 1024, // 50MB
   multiple = true 
 }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -35,7 +35,6 @@ const FileUploader = ({
     setError('');
     const fileArray = Array.from(fileList);
     
-    // Validate files
     for (let file of fileArray) {
       const validationError = validateFile(file);
       if (validationError) {
@@ -98,7 +97,7 @@ const FileUploader = ({
   };
 
   return (
-    <div className="w-[50vM] w-2xl mx-auto p-6">
+    <div className="w-full max-w-3xl mx-auto">
       {/* Drop Zone */}
       <div
         onDragOver={handleDragOver}
@@ -106,20 +105,20 @@ const FileUploader = ({
         onDrop={handleDrop}
         onClick={openFileDialog}
         className={`
-          relative border-2 border-dashed rounded-xl p-12 
+          relative border-2 border-dashed rounded-2xl p-12 
           transition-all duration-300 cursor-pointer
           ${isDragging 
-            ? 'border-cyan-400 bg-cyan-950/50 scale-[1.02]' 
-            : 'border-purple-500/50 bg-gray-900/50 hover:border-purple-400 hover:bg-gray-900/70'
+            ? 'border-pink-400 bg-pink-950/30 scale-[1.02]' 
+            : 'border-purple-500/40 bg-gray-900/40 hover:border-purple-400/60 hover:bg-gray-900/60'
           }
         `}
       >
-        {/* Animated gradient border effect */}
+        {/* Animated Glow Effect */}
         <div className={`
-          absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300
+          absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300
           ${isDragging ? 'opacity-100' : ''}
-          bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500
-          blur-xl -z-10
+          bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500
+          blur-2xl -z-10
         `} />
 
         <input
@@ -135,13 +134,13 @@ const FileUploader = ({
           <div className={`
             p-4 rounded-full transition-all duration-300
             ${isDragging 
-              ? 'bg-cyan-500/20 scale-110' 
+              ? 'bg-pink-500/20 scale-110' 
               : 'bg-purple-500/20'
             }
           `}>
             <Upload 
               className={`w-12 h-12 transition-colors duration-300 ${
-                isDragging ? 'text-cyan-400' : 'text-purple-400'
+                isDragging ? 'text-pink-400' : 'text-purple-400'
               }`} 
             />
           </div>
@@ -151,7 +150,7 @@ const FileUploader = ({
               {isDragging ? 'Drop files here' : 'Drag & drop files here'}
             </p>
             <p className="text-sm text-gray-400">
-              or <span className="text-purple-400 font-medium">browse</span> to choose files
+              or <span className="text-purple-400 font-medium hover:text-purple-300 transition-colors">browse</span> to choose files
             </p>
           </div>
 
@@ -163,14 +162,14 @@ const FileUploader = ({
 
       {/* Error Message */}
       {error && (
-        <div className="mt-4 p-4 bg-red-900/30 border border-red-500/50 rounded-lg">
+        <div className="mt-4 p-4 bg-red-900/30 border border-red-500/50 rounded-xl animate-fadeIn">
           <p className="text-red-400 text-sm">{error}</p>
         </div>
       )}
 
       {/* File List */}
       {files.length > 0 && (
-        <div className="mt-6 space-y-3">
+        <div className="mt-6 space-y-3 animate-fadeIn">
           <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
             <Check className="w-5 h-5 text-green-400" />
             Selected Files ({files.length})
@@ -181,8 +180,9 @@ const FileUploader = ({
               key={fileItem.id}
               className="
                 flex items-center justify-between p-4 
-                bg-gray-900/50 border border-purple-500/30 rounded-lg
-                hover:border-purple-400/50 transition-all duration-200
+                bg-gray-900/40 border border-purple-500/30 rounded-xl
+                hover:border-purple-400/50 hover:bg-gray-900/60
+                transition-all duration-200
                 group
               "
             >

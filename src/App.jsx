@@ -1,13 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import CardNav from './components/CardNav';
-import { GoArrowUpRight } from "react-icons/go";
-import logo from "./assets/logo.png"
+import logo from "./assets/logo.png";
 import LetterGlitch from './components/LetterGlitch';
 import FuzzyText from './components/FuzzyText';
-import {GridScan} from './components/GridScan';
-import FileUploader from './components/FileUploader'
-import { Upload, File, X, Check, Grid } from 'lucide-react';
+import { GridScan } from './components/GridScan';
+import FileUploader from './components/FileUploader';
 import SelectAlgorithm from "./components/SelectAlgorithm";
 import HashButton from './components/HashButton';
 import Result from './components/Result';
@@ -18,13 +15,15 @@ const App = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [algorithm, setAlgorithm] = useState("");
   const [hashResults, setHashResults] = useState([]);
-   const handleFileSelect = (files) => {
-    setSelectedFiles(files);
-   };
 
-   const handleHashComplete = (results) => {
+  const handleFileSelect = (files) => {
+    setSelectedFiles(files);
+  };
+
+  const handleHashComplete = (results) => {
     setHashResults(results);
-   };
+  };
+
   const items = [
     {
       label: "About",
@@ -36,7 +35,7 @@ const App = () => {
       ]
     },
     {
-      label: "Projects", 
+      label: "Projects",
       bgColor: "#003554",
       textColor: "#fff",
       links: [
@@ -46,7 +45,7 @@ const App = () => {
     },
     {
       label: "Contact",
-      bgColor: "#3c096c", 
+      bgColor: "#3c096c",
       textColor: "#fff",
       links: [
         { label: "Email", ariaLabel: "Email us" },
@@ -57,26 +56,30 @@ const App = () => {
   ];
 
   return (
-    <div className="relative w-full overflow-hidden flex flex-col">
-      {/* Section 1*/}
-      <div className="relative w-full min-h-screen bg-black">
-        <div className="absolute inset-0 w-full h-[90%]">
+    <div className="relative w-full overflow-hidden">
+      {/* Section 1: Hero */}
+      <section className="relative w-full min-h-screen bg-black">
+        {/* Background */}
+        <div className="absolute inset-0 w-full h-full">
           <GridScan
             sensitivity={0.55}
             lineThickness={3}
-            linesColor="#fff"
+            linesColor="#A855F7"
             gridScale={0.1}
-            scanColor="#FF9FFC"
-            scanOpacity={0.4}
+            scanColor="#EC4899"
+            scanOpacity={0.5}
             enablePost
-            bloomIntensity={0.6}
+            bloomIntensity={0.8}
             chromaticAberration={0.002}
             noiseIntensity={0.01}
           />
         </div>
 
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black pointer-events-none" />
+
         {/* Navigation */}
-        <CardNav
+        {/* <CardNav
           logo={logo}
           logoAlt="Company Logo"
           items={items}
@@ -85,85 +88,154 @@ const App = () => {
           buttonBgColor="#fff"
           buttonTextColor="#111"
           ease="power3.out"
-        />
+        /> */}
 
-        {/* FuzzyText*/}
+        {/* Hero Content */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className='flex flex-col items-center gap-6'>
-            <FuzzyText 
-              baseIntensity={0.09} 
-              hoverIntensity={0.2} 
+          <div className='flex flex-col items-center gap-8'>
+            <FuzzyText
+              baseIntensity={0.09}
+              hoverIntensity={0.2}
               enableHover={true}
-              fontSize='6rem'
+              fontSize='clamp(3rem, 8vw, 6rem)'
               fontWeight={900}
+              color='#F3F4F6'
             >
               Welcome to
             </FuzzyText>
-            <FuzzyText 
-              baseIntensity={0.09} 
-              hoverIntensity={0.2} 
+            <FuzzyText
+              baseIntensity={0.12}
+              hoverIntensity={0.25}
               enableHover={true}
-              fontSize="8rem"
+              fontSize="clamp(4rem, 12vw, 8rem)"
               fontWeight={900}
+              color='#A855F7'
             >
               Hash-X15
             </FuzzyText>
-            <button className='bg-gray-400 hover:bg-gray-600 rounded-xl'>
-              {/* <p className='p-3 font-bold'>Get Started</p> */}
-            </button>
+            <p className="text-gray-400 text-lg md:text-xl text-center max-w-2xl px-4 mt-4">
+              Secure, fast, and reliable file hash calculator powered by modern cryptography
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Section 2*/}
-      <div className="relative w-full min-h-[200vH] bottom-20 ">
+      {/* Section 2 */}
+      <section className="relative w-full bg-black">
+        {/* Background */}
         <div className="absolute inset-0 w-full h-full">
           <LetterGlitch
             glitchSpeed={60}
             centerVignette={true}
             outerVignette={true}
             smooth={true}
+            glitchColors={['#A855F7', '#EC4899', '#8B5CF6']}
           />
         </div>
-        <div className="relative z-10 flex flex-col top-48 items-center justify-center">
-          <FileUploader onFileSelect={handleFileSelect} />
 
-          {/* Algorithm Selector - Show only when files are selected */}
-          {selectedFiles.length > 0 && (
-            <div className="space-y-8 animate-fadeIn">
-              {/* Divider */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-700"></div>
+        {/* Gradient*/}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/80 pointer-events-none" />
+
+        {/* Content */}
+        <div className="relative z-10 py-20 px-4">
+          <div className="max-w-5xl mx-auto space-y-12">
+            {/* File Uploader */}
+            <div className="transition-all duration-500 ease-out">
+              <FileUploader onFileSelect={handleFileSelect} />
+            </div>
+
+            {/* Algorithm Selector */}
+            {selectedFiles.length > 0 && (
+              <div className="space-y-12 animate-fadeIn">
+                {/* Divider */}
+                <div className="relative my-8">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-purple-500/30"></div>
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="px-6 py-2 bg-black text-purple-400 text-sm font-semibold rounded-full border border-purple-500/30">
+                      Step 2: Select Algorithm
+                    </span>
+                  </div>
                 </div>
-                <div className="relative flex justify-center">
-                  <span className="px-4 bg-black text-gray-500 text-sm">
-                    Step 2: Select Algorithm
-                  </span>
-           </div>
-          </div>
 
-      {/* Algorithm Selector */}
-        <SelectAlgorithm 
-        algorithm={algorithm}
-        setAlgorithm={setAlgorithm}
-      />
+                {/*Algorithm Selector*/}
+                <SelectAlgorithm
+                  algorithm={algorithm}
+                  setAlgorithm={setAlgorithm}
+                />
+
+                {/* Hash Button*/}
+                {algorithm && (
+                  <div className="animate-fadeIn">
+                    {/* Divider */}
+                    <div className="relative my-8">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-pink-500/30"></div>
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="px-6 py-2 bg-black text-pink-400 text-sm font-semibold rounded-full border border-pink-500/30">
+                          Step 3: Calculate Hash
+                        </span>
+                      </div>
+                    </div>
+
+                    <HashButton
+                      files={selectedFiles}
+                      algorithm={algorithm}
+                      onHashComplete={handleHashComplete}
+                    />
+                  </div>
+                )}
+
+                {/* Results */}
+                {hashResults.length > 0 && (
+                  <div className="animate-fadeIn">
+                    {/* Divider */}
+                    <div className="relative my-8">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-green-500/30"></div>
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="px-6 py-2 bg-black text-green-400 text-sm font-semibold rounded-full border border-green-500/30">
+                          Results
+                        </span>
+                      </div>
+                    </div>
+
+                    <Result results={hashResults} />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3*/}
+      <AlgorithmEducation />
+
+      {/*Footer*/}
+      <Footer />
+
+      {/* Global Animations */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+      `}</style>
     </div>
-  )}
-  <div className='pt-10'>
-    {/* Hash Button */}
-    <HashButton
-      files={selectedFiles}
-      algorithm={algorithm}
-      onHashComplete={handleHashComplete}
-    />
-    <Result results={hashResults} />              
-  </div>
-  </div>
-  </div>
-  <AlgorithmEducation />
-  <Footer />
-</div>
   );
 };
 
