@@ -7,10 +7,12 @@ import LetterGlitch from './components/LetterGlitch';
 import FuzzyText from './components/FuzzyText';
 import {GridScan} from './components/GridScan';
 import FileUploader from './components/FileUploader'
-import { Upload, File, X, Check } from 'lucide-react';
+import { Upload, File, X, Check, Grid } from 'lucide-react';
 import SelectAlgorithm from "./components/SelectAlgorithm";
 import HashButton from './components/HashButton';
 import Result from './components/Result';
+import AlgorithmEducation from './components/AlgorithmEducation';
+import { Footer } from 'flowbite-react';
 
 const App = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -57,13 +59,19 @@ const App = () => {
   return (
     <div className="relative w-full overflow-hidden flex flex-col">
       {/* Section 1*/}
-      <div className="relative w-full min-h-screen">
+      <div className="relative w-full min-h-screen bg-black">
         <div className="absolute inset-0 w-full h-[90%]">
-          <LetterGlitch
-            glitchSpeed={60}
-            centerVignette={true}
-            outerVignette={true}
-            smooth={true}
+          <GridScan
+            sensitivity={0.55}
+            lineThickness={3}
+            linesColor="#fff"
+            gridScale={0.1}
+            scanColor="#FF9FFC"
+            scanOpacity={0.4}
+            enablePost
+            bloomIntensity={0.6}
+            chromaticAberration={0.002}
+            noiseIntensity={0.01}
           />
         </div>
 
@@ -108,57 +116,55 @@ const App = () => {
       </div>
 
       {/* Section 2*/}
-      <div className="relative w-full h-[300vH] bottom-20 bg-black">
+      <div className="relative w-full min-h-[200vH] bottom-20 ">
         <div className="absolute inset-0 w-full h-full">
-          <GridScan
-            sensitivity={0.55}
-            lineThickness={3}
-            linesColor="#fff"
-            gridScale={0.1}
-            scanColor="#FF9FFC"
-            scanOpacity={0.4}
-            enablePost
-            bloomIntensity={0.6}
-            chromaticAberration={0.002}
-            noiseIntensity={0.01}
+          <LetterGlitch
+            glitchSpeed={60}
+            centerVignette={true}
+            outerVignette={true}
+            smooth={true}
           />
         </div>
         <div className="relative z-10 flex flex-col top-48 items-center justify-center">
-  <FileUploader onFileSelect={handleFileSelect} />
+          <FileUploader onFileSelect={handleFileSelect} />
 
-  {/* Algorithm Selector - Show only when files are selected */}
-  {selectedFiles.length > 0 && (
-    <div className="space-y-8 animate-fadeIn">
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-700"></div>
-        </div>
-        <div className="relative flex justify-center">
-          <span className="px-4 bg-black text-gray-500 text-sm">
-            Step 2: Select Algorithm
-          </span>
-        </div>
-      </div>
+          {/* Algorithm Selector - Show only when files are selected */}
+          {selectedFiles.length > 0 && (
+            <div className="space-y-8 animate-fadeIn">
+              {/* Divider */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-700"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-4 bg-black text-gray-500 text-sm">
+                    Step 2: Select Algorithm
+                  </span>
+           </div>
+          </div>
 
       {/* Algorithm Selector */}
-      <SelectAlgorithm 
+        <SelectAlgorithm 
         algorithm={algorithm}
         setAlgorithm={setAlgorithm}
       />
     </div>
   )}
   <div className='pt-10'>
-  {/* Hash Button */}
-  <HashButton
-    files={selectedFiles}
-    algorithm={algorithm}
-    onHashComplete={handleHashComplete}
-  />
-  <Result results={hashResults} />              
+    {/* Hash Button */}
+    <HashButton
+      files={selectedFiles}
+      algorithm={algorithm}
+      onHashComplete={handleHashComplete}
+    />
+    <Result results={hashResults} />              
   </div>
-</div>
-</div>
+  </div>
+  </div>
+  <AlgorithmEducation />
+  <footer>
+    <Footer />
+  </footer>
 </div>
   );
 };

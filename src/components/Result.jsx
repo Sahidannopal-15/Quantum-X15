@@ -264,14 +264,6 @@ const Result = ({ results = [] }) => {
           </div>
         ))}
       </div>
-
-      {/* Info Box */}
-      <div className="mt-8 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-        <p className="text-sm text-gray-400">
-          <span className="text-blue-400 font-semibold">💡 Tip:</span> Click on any result to expand and view full hash value. 
-          Use the copy button to quickly copy hash to clipboard.
-        </p>
-      </div>
     </div>
   );
 };
