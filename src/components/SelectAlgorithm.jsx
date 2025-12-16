@@ -27,7 +27,7 @@ export default function SelectAlgorithm({ algorithm, setAlgorithm }) {
           <label
             key={algo.id}
             className={`
-              relative group cursor-pointer
+              relative cursor-pointer
               p-5 rounded-xl border-2 transition-all duration-300
               ${algorithm === algo.id
                 ? "border-purple-500 bg-gradient-to-br from-purple-500/20 to-pink-500/20 shadow-lg shadow-purple-500/30"
@@ -65,17 +65,17 @@ export default function SelectAlgorithm({ algorithm, setAlgorithm }) {
               {/* Check Icon */}
               <div className={`
                 flex items-center justify-center w-6 h-6 rounded-full
-                transition-all duration-300
+                transition-colors duration-300
                 ${algorithm === algo.id
                   ? "bg-purple-500 scale-100"
-                  : "bg-gray-700 scale-0 group-hover:scale-100"
+                  : "bg-gray-700 scale-0 "
                 }
               `}>
                 <Check className="w-4 h-4 text-white" />
               </div>
             </div>
 
-            {/* Glow Effect on Selected */}
+            {/* Glow Effect*/}
             {algorithm === algo.id && (
               <div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 blur-xl opacity-30" />
             )}

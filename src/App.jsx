@@ -62,21 +62,20 @@ const App = () => {
         {/* Background */}
         <div className="absolute inset-0 w-full h-full">
           <GridScan
-            sensitivity={0.55}
-            lineThickness={3}
+            lineThickness={1.4}
             linesColor="#A855F7"
             gridScale={0.1}
             scanColor="#EC4899"
-            scanOpacity={0.5}
+            scanOpacity={1}
             enablePost
-            bloomIntensity={0.8}
+            bloomIntensity={0.4}
             chromaticAberration={0.002}
-            noiseIntensity={0.01}
+            noiseIntensity={0.008}
           />
         </div>
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black pointer-events-none" />
 
         {/* Navigation */}
         {/* <CardNav
@@ -125,16 +124,16 @@ const App = () => {
         {/* Background */}
         <div className="absolute inset-0 w-full h-full">
           <LetterGlitch
-            glitchSpeed={60}
+            glitchSpeed={100}
             centerVignette={true}
-            outerVignette={true}
-            smooth={true}
+            outerVignette={false}
+            smooth={false}
             glitchColors={['#A855F7', '#EC4899', '#8B5CF6']}
           />
         </div>
 
         {/* Gradient*/}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/80 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black/60 pointer-events-none" />
 
         {/* Content */}
         <div className="relative z-10 py-20 px-4">
@@ -191,7 +190,6 @@ const App = () => {
                 {/* Results */}
                 {hashResults.length > 0 && (
                   <div className="animate-fadeIn">
-                    {/* Divider */}
                     <div className="relative my-8">
                       <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-green-500/30"></div>
@@ -218,7 +216,6 @@ const App = () => {
       {/*Footer*/}
       <Footer />
 
-      {/* Global Animations */}
       <style>{`
         @keyframes fadeIn {
           from {

@@ -114,12 +114,9 @@ const FileUploader = ({
         `}
       >
         {/* Animated Glow Effect */}
-        <div className={`
-          absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300
-          ${isDragging ? 'opacity-100' : ''}
-          bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500
-          blur-2xl -z-10
-        `} />
+        {isDragging && (
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 blur-xl -z-10 opacity-50" />
+        )}
 
         <input
           ref={fileInputRef}
@@ -162,14 +159,14 @@ const FileUploader = ({
 
       {/* Error Message */}
       {error && (
-        <div className="mt-4 p-4 bg-red-900/30 border border-red-500/50 rounded-xl animate-fadeIn">
+        <div className="mt-4 p-4 bg-red-900/30 border border-red-500/50 rounded-xl transition-colors duration-300">
           <p className="text-red-400 text-sm">{error}</p>
         </div>
       )}
 
       {/* File List */}
       {files.length > 0 && (
-        <div className="mt-6 space-y-3 animate-fadeIn">
+        <div className="mt-6 space-y-3 transition-colors duration-300">
           <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
             <Check className="w-5 h-5 text-green-400" />
             Selected Files ({files.length})
@@ -180,7 +177,7 @@ const FileUploader = ({
               key={fileItem.id}
               className="
                 flex items-center justify-between p-4 
-                bg-gray-900/40 border border-purple-500/30 rounded-xl
+                bg-gray-900/40 border border-purple-500/20 rounded-xl
                 hover:border-purple-400/50 hover:bg-gray-900/60
                 transition-all duration-200
                 group

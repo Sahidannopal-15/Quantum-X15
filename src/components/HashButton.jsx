@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Hash, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import { hashFile } from '../utils/hash'; // Import hash function
 
 const HashButton = ({ 
@@ -66,16 +66,16 @@ const HashButton = ({
           onClick={handleCalculateHash}
           disabled={isDisabled}
           className={`
-            group relative px-10 py-5 
+            relative px-10 py-5 
             bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500
             bg-size-200 bg-pos-0
             text-white font-bold text-xl rounded-2xl
-            transition-all duration-500
-            shadow-2xl
+            transition-all duration-300
+            shadow-xl
             flex items-center gap-4
             ${isDisabled 
               ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:bg-pos-100 hover:scale-105 hover:shadow-purple-500/50 cursor-pointer'
+              : 'hover:opacity-90 cursor-pointer transition-all duration-300 hover:scale-105' 
             }
           `}
         >
@@ -86,15 +86,7 @@ const HashButton = ({
               : `Calculate Hash for ${files.length} file${files.length > 1 ? 's' : ''}`
             }
           </span>
-
-          {/* Glow Effect */}
-          <div className={`
-            absolute inset-0 -z-10 rounded-2xl 
-            bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 
-            blur-2xl transition-opacity duration-300
-            ${isDisabled ? 'opacity-0' : 'opacity-40 group-hover:opacity-70'}
-          `} />
-
+          
           {/* Progress Bar */}
           {isCalculating && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-2xl overflow-hidden">
@@ -110,7 +102,7 @@ const HashButton = ({
         <div className="flex items-center gap-2 text-sm text-gray-400">
           {isCalculating ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-4 h-4" />
               Processing files with {algorithm}...
             </span>
           ) : files.length > 0 ? (
@@ -123,19 +115,6 @@ const HashButton = ({
           )}
         </div>
       </div>
-
-      {/* CSS */}
-      <style>{`
-        .bg-size-200 {
-          background-size: 200% 100%;
-        }
-        .bg-pos-0 {
-          background-position: 0% 0%;
-        }
-        .bg-pos-100:hover {
-          background-position: 100% 0%;
-        }
-      `}</style>
     </div>
   );
 };
