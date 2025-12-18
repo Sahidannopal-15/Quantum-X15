@@ -57,7 +57,7 @@ const App = () => {
     <div className="relative w-full overflow-hidden">
       {/* Section 1 */}
       <section className="relative w-full h-[90vh] bg-black">
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-[90vh]">
           <GridScan
             lineThickness={1.4}
             linesColor="#A855F7"
