@@ -56,7 +56,7 @@ const App = () => {
   return (
     <div className="relative w-full overflow-hidden">
       {/* Section 1 */}
-      <section className="relative w-full min-h-screen bg-black">
+      <section className="relative w-full h-[90vh] bg-black">
         <div className="absolute inset-0 w-full h-full">
           <GridScan
             lineThickness={1.4}
@@ -93,16 +93,16 @@ const App = () => {
             >
               Hash-X15
             </FuzzyText>
-            <p className="text-gray-400 text-lg md:text-xl text-center max-w-2xl px-4 mt-4">
-              Secure, fast, and reliable file hash calculator powered by modern cryptography
+            <p className="text-gray-400 text-lg md:text-xl text-center px-4 mt-10">
+              Secure, fast, and reliable file hash calculator powered by HashX-15
             </p>
           </div>
         </div>
       </section>
 
       {/* Section 2 */}
-<section className="relative w-full bg-black">
-  <div className="absolute inset-0 w-full h-[46vh]">
+  <section className="relative w-full bg-black">
+    <div className="absolute inset-0 w-full h-[46vh]">
     <LetterGlitch
       glitchSpeed={120}
       centerVignette={true}
