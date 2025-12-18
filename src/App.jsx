@@ -121,7 +121,7 @@ const App = () => {
           <div className="relative my-6">
             <div className="h-px bg-purple-500/20 w-full"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <span className="px-5 py-1.5 bg-black text-purple-400 text-xs font-semibold rounded-full border border-purple-500/20">]
+              <span className="px-5 py-1.5 bg-black text-purple-400 text-xs font-semibold rounded-full border border-purple-500/20">
                 Step 2: Select Algorithm
               </span>
             </div>
