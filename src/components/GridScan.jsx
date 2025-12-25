@@ -280,7 +280,7 @@ export const GridScan = ({
   scanOpacity = 0.4,
   gridScale = 0.1,
   lineStyle = 'solid',
-  lineJitter = 0.1,
+  lineJitter = 0,
   scanDirection = 'pingpong',
   enablePost = false,
   bloomIntensity = 0,
@@ -292,7 +292,7 @@ export const GridScan = ({
   scanSoftness = 2,
   scanPhaseTaper = 0.9,
   scanDuration = 2.0,
-  scanDelay = 2.0,
+  scanDelay = 1,
   enableGyro = false,
   scanOnClick = false,
   snapBackDelay = 250,
@@ -382,7 +382,6 @@ export const GridScan = ({
         try {
           await DeviceOrientationEvent.requestPermission();
         } catch {
-          // noop
         }
       }
     };
@@ -508,15 +507,13 @@ export const GridScan = ({
     window.addEventListener('resize', onResize);
 
     let last = performance.now();
-   // Ganti fungsi tick lama dengan ini
-let lastFrameTime = 0;
-const fpsLimit = 18; // Batasi ke 30 FPS agar GPU tidak meledak
 
+let lastFrameTime = 0;
+const fpsLimit = 18; 
 const tick = () => {
   const now = performance.now();
   const delta = now - lastFrameTime;
 
-  // Jika belum waktunya render frame baru, lewati
   if (delta < (1000 / fpsLimit)) {
     rafRef.current = requestAnimationFrame(tick);
     return;
@@ -525,11 +522,9 @@ const tick = () => {
   lastFrameTime = now;
   const dt = Math.max(0, Math.min(0.1, delta / 1000));
 
-  // --- Sisa kode animasi Anda tetap sama di bawah ini ---
   lookCurrent.current.copy(
     smoothDampVec2(lookCurrent.current, lookTarget.current, lookVel.current, smoothTime, maxSpeed, dt)
   );
-  // ... (sampai renderer.render)
   
   material.uniforms.iTime.value = now / 1000;
   renderer.clear(true, true, true);

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   CheckCircle2, 
   Copy, 
@@ -8,12 +8,16 @@ import {
   Hash,
   ChevronDown,
   ChevronUp,
-  Check
+  Check,
+  FileDown,
+  Archive
 } from 'lucide-react';
+import JSZip from 'jszip';
 
 const Result = ({ results = [] }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [isDownloadingZip, setIsDownloadingZip] = useState(false);
 
   const formatFileSize = useCallback((bytes) => {
     if (bytes === 0) return '0 Bytes';
@@ -41,8 +45,94 @@ const Result = ({ results = [] }) => {
     });
   }, []);
 
+  const downloadFile = useCallback((result) => {
+    if (!result.file) {
+      alert('File not available for download');
+      return;
+    }
+    
+    const url = URL.createObjectURL(result.file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = result.fileName;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const downloadHashTxt = useCallback((result) => {
+    const content = `File Name: ${result.fileName}
+File Size: ${formatFileSize(result.fileSize)}
+Algorithm: ${result.algorithm}
+Hash: ${result.hash}
+Timestamp: ${formatTimestamp(result.timestamp)}`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${result.fileName}.hash.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [formatFileSize, formatTimestamp]);
+
+  const downloadAllZip = useCallback(async () => {
+    if (results.length === 0) return;
+    
+    setIsDownloadingZip(true);
+    
+    try {
+      const zip = new JSZip();
+      
+      const filesFolder = zip.folder('files');
+      const hashesFolder = zip.folder('hashes');
+      
+      for (const result of results) {
+        if (result.file) {
+          filesFolder.file(result.fileName, result.file);
+        }
+        
+        const hashContent = `File Name: ${result.fileName}
+File Size: ${formatFileSize(result.fileSize)}
+Algorithm: ${result.algorithm}
+Hash: ${result.hash}
+Timestamp: ${formatTimestamp(result.timestamp)}`;
+        
+        hashesFolder.file(`${result.fileName}.hash.txt`, hashContent);
+      }
+      
+      const summary = results.map(r => ({
+        fileName: r.fileName,
+        fileSize: r.fileSize,
+        algorithm: r.algorithm,
+        hash: r.hash,
+        timestamp: r.timestamp
+      }));
+      zip.file('summary.json', JSON.stringify(summary, null, 2));
+      
+      const content = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(content);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `hash-results-${Date.now()}.zip`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error creating ZIP:', error);
+      alert('Error creating ZIP file');
+    } finally {
+      setIsDownloadingZip(false);
+    }
+  }, [results, formatFileSize, formatTimestamp]);
+
   const downloadJSON = useCallback(() => {
-    const dataStr = JSON.stringify(results, null, 2);
+    const data = results.map(r => ({
+      fileName: r.fileName,
+      fileSize: r.fileSize,
+      algorithm: r.algorithm,
+      hash: r.hash,
+      timestamp: r.timestamp
+    }));
+    const dataStr = JSON.stringify(data, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -57,7 +147,7 @@ const Result = ({ results = [] }) => {
     const rows = results.map(r => [
       r.fileName, r.fileSize, r.algorithm, r.hash, r.timestamp
     ]);
-    
+
     const csv = [
       headers.join(','),
       ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
@@ -89,22 +179,43 @@ const Result = ({ results = [] }) => {
             <div>
               <h2 className="text-2xl font-bold text-white">Hash Results</h2>
               <p className="text-sm text-gray-400">
-                {results.length} file{results.length > 1 ? 's' : ''} 
-                processed
+                {results.length} file{results.length > 1 ? 's' : ''} processed
               </p>
             </div>
           </div>
+          
+          {/* Download Buttons - UPDATED */}
           <div className="flex gap-2">
             <button
+              onClick={downloadAllZip}
+              disabled={isDownloadingZip}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 text-purple-400 rounded-lg hover:bg-purple-500/25 transition-colors duration-150 border border-purple-500/20 text-sm disabled:opacity-50"
+              title="Download all files and hashes as ZIP"
+            >
+              {isDownloadingZip ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Archive className="w-3.5 h-3.5" />
+                  ZIP
+                </>
+              )}
+            </button>
+            <button
               onClick={downloadJSON}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/15 text-blue-400 rounded-lg hover:bg-blue-500/25 transition-colors duration-150 border border-blue-500/20 text-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/15 text-blue-400 rounded-lg 
+              hover:bg-blue-500/25 transition-colors duration-150 border border-blue-500/20 text-sm"
             >
               <Download className="w-3.5 h-3.5" />
               JSON
             </button>
             <button
               onClick={downloadCSV}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-green-500/15 text-green-400 rounded-lg hover:bg-green-500/25 transition-colors duration-150 border border-green-500/20 text-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-green-500/15 text-green-400 rounded-lg 
+              hover:bg-green-500/25 transition-colors duration-150 border border-green-500/20 text-sm"
             >
               <Download className="w-3.5 h-3.5" />
               CSV
@@ -119,7 +230,8 @@ const Result = ({ results = [] }) => {
         {results.map((result, index) => (
           <div
             key={index}
-            className="bg-gray-900/70 border border-purple-500/15 rounded-lg hover:border-purple-400/30 transition-colors duration-150 overflow-hidden"
+            className="bg-gray-900/70 border border-purple-500/15 rounded-lg 
+            hover:border-purple-400/30 transition-colors duration-150 overflow-hidden"
           >
             <div
               onClick={() => toggleExpand(index)}
@@ -151,18 +263,21 @@ const Result = ({ results = [] }) => {
                 </button>
               </div>
             </div>
+            
             {expandedIndex === index && (
               <div className="px-3 pb-3 space-y-3 border-t border-gray-800">
                 <div className="pt-3">
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-semibold text-gray-400">
+                      Hash Value
                     </label>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         copyToClipboard(result.hash, index);
                       }}
-                      className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 text-gray-300 rounded hover:bg-gray-700 transition-colors duration-150 text-xs"
+                      className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 text-gray-300 rounded 
+                      hover:bg-gray-700 transition-colors duration-150 text-xs"
                     >
                       {copiedIndex === index ? (
                         <>
@@ -181,8 +296,34 @@ const Result = ({ results = [] }) => {
                     {result.hash}
                   </div>
                 </div>
+
+                {/* NEW: Download Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadFile(result);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-500/15 text-blue-400 rounded 
+                    hover:bg-blue-500/25 transition-colors duration-150 border border-blue-500/20 text-xs font-semibold"
+                  >
+                    <FileDown className="w-3.5 h-3.5" />
+                    Download File
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadHashTxt(result);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-green-500/15 text-green-400 rounded 
+                    hover:bg-green-500/25 transition-colors duration-150 border border-green-500/20 text-xs font-semibold"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Download Hash
+                  </button>
+                </div>
+
                 <div className="grid grid-cols-2 gap-2.5">
-                  
                   <div className="p-2 bg-gray-800/50 rounded">
                     <div className="flex items-center gap-1.5 mb-1">
                       <Hash className="w-3 h-3 text-purple-400" />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2, CheckCircle2 } from 'lucide-react';
-import { hashFile } from '../utils/hash'; // Import hash function
+import { hashFile } from '../utils/hash';
 
 const HashButton = ({ 
   files = [], 
@@ -10,7 +10,6 @@ const HashButton = ({
   const [isCalculating, setIsCalculating] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  // Main hash calculation handler using hash.js
   const handleCalculateHash = async () => {
     if (files.length === 0) return;
 
@@ -20,11 +19,9 @@ const HashButton = ({
     try {
       const results = [];
       
-      // Process each file using your hash.js
       for (let i = 0; i < files.length; i++) {
         const fileItem = files[i];
         
-        // Calculate hash using your optimized chunked function
         const hashHex = await hashFile(fileItem.file, algorithm);
         
         results.push({
@@ -33,14 +30,13 @@ const HashButton = ({
           fileType: fileItem.type || 'unknown',
           algorithm: algorithm,
           hash: hashHex,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          file: fileItem.file 
         });
         
-        // Update progress
         setProgress(((i + 1) / files.length) * 100);
       }
 
-      // Pass results to parent component
       if (onHashComplete) {
         onHashComplete(results);
       }
@@ -61,25 +57,22 @@ const HashButton = ({
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div className="flex flex-col items-center gap-4">
-        {/* Calculate Button */}
         <button
           onClick={handleCalculateHash}
           disabled={isDisabled}
           className={`
             relative px-10 py-5 
             bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500
-            bg-size-200 bg-pos-0
             text-white font-bold text-xl rounded-2xl
             transition-all duration-300
-            shadow-xl
-            flex items-center gap-4
+            flex items-center justify-center
+            min-w-[320px]
             ${isDisabled 
               ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:opacity-90 cursor-pointer transition-all duration-300 hover:scale-105' 
+              : 'hover:opacity-90 cursor-pointer'
             }
           `}
         >
-          {/* Text */}
           <span>
             {isCalculating 
               ? `Calculating... ${Math.round(progress)}%`
@@ -87,7 +80,6 @@ const HashButton = ({
             }
           </span>
           
-          {/* Progress Bar */}
           {isCalculating && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-2xl overflow-hidden">
               <div 
@@ -98,11 +90,10 @@ const HashButton = ({
           )}
         </button>
 
-        {/* Info Text */}
         <div className="flex items-center gap-2 text-sm text-gray-400">
           {isCalculating ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               Processing files with {algorithm}...
             </span>
           ) : files.length > 0 ? (

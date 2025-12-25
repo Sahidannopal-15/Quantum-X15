@@ -4,7 +4,7 @@ import { Upload, File, X, Check } from 'lucide-react';
 const FileUploader = ({ 
   onFileSelect, 
   accept = "*",
-  maxSize = 50 * 1024 * 1024, // 50MB
+  maxSize = 50 * 1024 * 1024, 
   multiple = true 
 }) => {
   const [isDragging, setIsDragging] = useState(false);
